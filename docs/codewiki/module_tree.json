@@ -1,0 +1,391 @@
+{
+    "Captcha Framework": {
+        "path": "damai/damai-captcha-manage-framework",
+        "components": [
+            "Const",
+            "BlockPuzzleCaptchaServiceImpl",
+            "CaptchaCacheServiceMemImpl",
+            "CaptchaConstant",
+            "CaptchaServiceFactory",
+            "ClickWordCaptchaServiceImpl",
+            "DefaultCaptchaServiceImpl",
+            "DefaultLimitHandler",
+            "RotatePuzzleCaptchaServiceImpl",
+            "Base64Utils",
+            "CacheUtil",
+            "DateUtils",
+            "FileCopyUtils",
+            "ImageUtils",
+            "JsonUtil",
+            "Md5Util",
+            "RandomUtils",
+            "StreamUtils",
+            "AjCaptchaAutoConfiguration",
+            "AjCaptchaServiceAutoConfiguration",
+            "AjCaptchaStorageAutoConfiguration",
+            "CaptchaAutoConfig",
+            "CaptchaEnvironment",
+            "CaptchaController",
+            "AjCaptchaProperties",
+            "CaptchaCacheServiceRedisImpl"
+        ],
+        "children": {}
+    },
+    "Common": {
+        "path": "damai/damai-common",
+        "components": [
+            "DaMaiCommonAutoConfig",
+            "Constant",
+            "SpringUtil",
+            "SpringEnvironment",
+            "BaseParameterHolder",
+            "Aes",
+            "Base64",
+            "DateUtils",
+            "RemoteUtil"
+        ],
+        "children": {}
+    },
+    "Elasticsearch Framework": {
+        "path": "damai/damai-elasticsearch-framework",
+        "components": [
+            "BusinessEsAutoConfig",
+            "BusinessEsProperties",
+            "EsDataCreateDto",
+            "EsGeoPointDto",
+            "EsGeoPointSortDto"
+        ],
+        "children": {}
+    },
+    "ID Generator Framework": {
+        "path": "damai/damai-id-generator-framework",
+        "components": [
+            "IdGeneratorRedisConfig",
+            "WorkerNodeConfig",
+            "AbstractDockerUtils",
+            "AbstractEnumUtils",
+            "AbstractNetUtils",
+            "WorkerNodeEntity",
+            "IdGeneratorAutoConfig",
+            "IdGeneratorConstant"
+        ],
+        "children": {}
+    },
+    "Redis Tool Framework": {
+        "path": "damai/damai-redis-tool-framework",
+        "components": [
+            "RedisFrameWorkAutoConfig",
+            "CacheUtil",
+            "RedisCacheAutoConfig",
+            "RedisStreamAutoConfig",
+            "RedisStreamConstant"
+        ],
+        "children": {}
+    },
+    "Redisson Framework": {
+        "path": "damai/damai-redisson-framework",
+        "components": [
+            "BloomFilterAutoConfiguration",
+            "BloomFilterProperties",
+            "RedissonBaseProperties",
+            "RedissonCommonAutoConfiguration",
+            "LockInfoType",
+            "Constants",
+            "RepeatExecuteLimitAutoConfiguration",
+            "RepeatExecuteLimitConstants",
+            "RepeatExecuteLimitConstant",
+            "ServiceLockAutoConfiguration",
+            "DistributedLockConstants",
+            "TaskCall",
+            "TaskRun",
+            "DelayQueueAutoConfig"
+        ],
+        "children": {}
+    },
+    "Spring Cloud Framework": {
+        "path": "damai/damai-spring-cloud-framework",
+        "components": [
+            "FailureCallback",
+            "SuccessCallback",
+            "MybatisPlusAutoConfiguration",
+            "PageUtil",
+            "DatabaseOrderComplexGeneArithmetic",
+            "TableOrderComplexGeneArithmetic",
+            "SwaggerConfiguration",
+            "Representer",
+            "ExtraFeignAutoConfiguration",
+            "FilterAutoConfiguration",
+            "GrayLoadBalanceAutoConfiguration",
+            "DelegateCreator",
+            "EnhanceLoadBalancerClientConfiguration",
+            "GatewayContextAutoConfiguration",
+            "GatewayContextHolder",
+            "WebMvcContextAutoConfiguration",
+            "AbstractApplicationCommandLineRunnerHandler",
+            "InitializeAutoConfig",
+            "InitializeHandlerType",
+            "CompositeAutoConfiguration"
+        ],
+        "children": {}
+    },
+    "Thread Pool Framework": {
+        "path": "damai/damai-thread-pool-framework",
+        "components": [
+            "BusinessThreadPool",
+            "FilterConfig",
+            "ThreadPoolRejectedExecutionHandler",
+            "BusinessAbortPolicy"
+        ],
+        "children": {}
+    },
+    "Base Data Client": {
+        "path": "damai/damai-server-client/damai-base-data-client",
+        "components": [
+            "BaseDataClientFallback",
+            "ChannelDataAddDto",
+            "TokenDataDto",
+            "TokenDataVo"
+        ],
+        "children": {}
+    },
+    "Customize Client": {
+        "path": "damai/damai-server-client/damai-customize-client",
+        "components": [
+            "AllRuleDto",
+            "BroadcastCallDto",
+            "DepthRuleDto",
+            "DepthRuleStatusDto",
+            "DepthRuleUpdateDto",
+            "RuleGetDto",
+            "RuleStatusDto",
+            "RuleUpdateDto"
+        ],
+        "children": {}
+    },
+    "Job Client": {
+        "path": "damai/damai-server-client/damai-job-client",
+        "components": [
+            "JobClientFallback",
+            "JobCallBackDto",
+            "JobInfoDto",
+            "JobInfoPageDto",
+            "RunJobDto"
+        ],
+        "children": {}
+    },
+    "Order Client": {
+        "path": "damai/damai-server-client/damai-order-client",
+        "components": [
+            "OrderClientFallback",
+            "OrderGetDto",
+            "OrderListDto",
+            "OrderPayCheckDto",
+            "OrderPayDto",
+            "OrderRefundDto",
+            "OrderListVo",
+            "OrderTicketUserVo",
+            "TicketUserInfoVo"
+        ],
+        "children": {}
+    },
+    "Pay Client": {
+        "path": "damai/damai-server-client/damai-pay-client",
+        "components": [
+            "PayClientFallback",
+            "PayBillDto"
+        ],
+        "children": {}
+    },
+    "Program Client": {
+        "path": "damai/damai-server-client/damai-program-client",
+        "components": [
+            "ProgramClientFallback",
+            "ParentProgramCategoryDto",
+            "ProgramAddDto",
+            "ProgramCategoryAddDto",
+            "ProgramCategoryDto",
+            "ProgramListDto",
+            "ProgramOrderCreateDto",
+            "ProgramRecommendListDto",
+            "ProgramSearchDto",
+            "ProgramShowTimeAddDto",
+            "SeatAddDto",
+            "SeatBatchAddDto",
+            "SeatBatchRelateInfoAddDto",
+            "SeatDto",
+            "SeatListDto",
+            "TestDto",
+            "TestSendDto",
+            "TicketCategoryAddDto",
+            "TicketCategoryDto",
+            "TicketCategoryListByProgramDto",
+            "ProgramCategoryVo",
+            "ProgramShowTimeVo",
+            "ProgramSimpleInfoVo"
+        ],
+        "children": {}
+    },
+    "User Client": {
+        "path": "damai/damai-server-client/damai-user-client",
+        "components": [
+            "UserClientFallback",
+            "ProgramOrderTicketUserDto",
+            "TicketUserDto",
+            "TicketUserIdDto",
+            "UserAuthenticationDto",
+            "UserExistDto",
+            "UserLoginDto",
+            "UserLogoutDto",
+            "UserMobileDto",
+            "UserRegisterDto",
+            "UserUpdateDto",
+            "UserUpdateEmailDto",
+            "UserUpdateMobileDto",
+            "UserUpdatePasswordDto",
+            "TicketUserVo"
+        ],
+        "children": {}
+    },
+    "Admin Service": {
+        "path": "damai/damai-server/damai-admin-service",
+        "components": [
+            "AdminApplication",
+            "AdminConfig",
+            "MonitorServerConfig",
+            "SecurityConfig"
+        ],
+        "children": {}
+    },
+    "Base Data Service": {
+        "path": "damai/damai-server/damai-base-data-service",
+        "components": [
+            "BaseDataApplication",
+            "AreaController",
+            "ChannelDataController",
+            "TestController",
+            "Area",
+            "ChannelDataService",
+            "TestService"
+        ],
+        "children": {}
+    },
+    "Customize Service": {
+        "path": "damai/damai-server/damai-customize-service",
+        "components": [
+            "CustomizeApplication",
+            "AllRuleController",
+            "ApiDataController",
+            "BroadcastController",
+            "DepthRuleController",
+            "RuleController",
+            "ApiData",
+            "ApiDataMessageConsumer",
+            "ServiceBroadcastCall"
+        ],
+        "children": {}
+    },
+    "Gateway Service": {
+        "path": "damai/damai-server/damai-gateway-service",
+        "components": [
+            "GatewayApplication",
+            "GatewaySentinelConfiguration",
+            "GatewayConstant",
+            "HystrixFallBackController",
+            "ApiDataDto",
+            "RequestValidationFilter",
+            "ResponseValidationFilter",
+            "KafkaTopic",
+            "ProducerConfig",
+            "RateLimiterConfig",
+            "ApiRestrictData",
+            "TokenService",
+            "DepthRuleVo",
+            "RuleVo",
+            "UserVo"
+        ],
+        "children": {}
+    },
+    "Mybatis Plus Service": {
+        "path": "damai/damai-server/damai-mybatis-plus-service",
+        "components": [
+            "MybatisPlusGenerator"
+        ],
+        "children": {}
+    },
+    "Order Service": {
+        "path": "damai/damai-server/damai-order-service",
+        "components": [
+            "OrderApplication",
+            "OrderController",
+            "OrderTicketUserAggregate",
+            "OrderDataTask",
+            "OrderConstant",
+            "DelayOrderCancelConsumer",
+            "CreateOrderConsumer"
+        ],
+        "children": {}
+    },
+    "Pay Service": {
+        "path": "damai/damai-server/damai-pay-service",
+        "components": [
+            "PayApplication",
+            "PayController",
+            "PayAutoConfig",
+            "PayBillService",
+            "RefundBillService"
+        ],
+        "children": {}
+    },
+    "Program Service": {
+        "path": "damai/damai-server/damai-program-service",
+        "components": [
+            "ProgramApplication",
+            "ProgramCategoryController",
+            "ProgramController",
+            "ProgramOrderController",
+            "ProgramResetController",
+            "ProgramShowTimeController",
+            "SeatController",
+            "TestController",
+            "TicketCategoryController",
+            "ProgramJoinShowTime",
+            "TicketCategoryAggregate",
+            "LockTask",
+            "ProgramBloomFilterCheckHandler",
+            "ProgramRecommendCheckHandler",
+            "ProgramDetailCheckHandler",
+            "ProgramOrderCreateParamCheckHandler",
+            "ProgramUserExistCheckHandler",
+            "ProgramOrderConstant",
+            "ProgramTimeType",
+            "DelayOperateProgramDataConsumer",
+            "ProgramBloomFilterInit",
+            "ProgramCategoryInitData",
+            "ProgramDocumentParamName",
+            "ProgramRedisStreamConsumer",
+            "ProgramDataTask",
+            "ProgramOrderV1Strategy",
+            "ProgramOrderV2Strategy",
+            "ProgramOrderV3Strategy",
+            "ProgramOrderV4Strategy",
+            "SeatMatch"
+        ],
+        "children": {}
+    },
+    "User Service": {
+        "path": "damai/damai-server/damai-user-service",
+        "components": [
+            "UserApplication",
+            "TestDto",
+            "TicketUserController",
+            "UserCaptchaController",
+            "UserController",
+            "UserMobileService",
+            "UserExistCheckHandler",
+            "UserRegisterCountCheckHandler",
+            "UserRegisterVerifyCaptcha",
+            "UserBloomFilterInitData"
+        ],
+        "children": {}
+    }
+}

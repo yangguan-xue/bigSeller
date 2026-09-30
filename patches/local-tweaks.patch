@@ -1,0 +1,133 @@
+diff --git a/damai-common/src/main/java/com/damai/util/RsaSignTool.java b/damai-common/src/main/java/com/damai/util/RsaSignTool.java
+index 7425d891..a5ad3a46 100644
+--- a/damai-common/src/main/java/com/damai/util/RsaSignTool.java
++++ b/damai-common/src/main/java/com/damai/util/RsaSignTool.java
+@@ -180,7 +180,7 @@ public class RsaSignTool {
+         //v1加密版本
+         parameterTransferV1();
+         //v2加密版本
+-        //parameterTransferV2();
++        parameterTransferV2();
+     }
+     
+     public static void parameterTransferV1() {
+diff --git a/damai-redis-tool-framework/damai-redis-framework/src/main/java/com/damai/redis/RedisCacheImpl.java b/damai-redis-tool-framework/damai-redis-framework/src/main/java/com/damai/redis/RedisCacheImpl.java
+index 55023dea..696c24eb 100644
+--- a/damai-redis-tool-framework/damai-redis-framework/src/main/java/com/damai/redis/RedisCacheImpl.java
++++ b/damai-redis-tool-framework/damai-redis-framework/src/main/java/com/damai/redis/RedisCacheImpl.java
+@@ -38,7 +38,7 @@ public class RedisCacheImpl implements RedisCache {
+     @Override
+     public <T> T get(RedisKeyBuild redisKeyBuild, Class<T> clazz) {
+         CacheUtil.checkNotBlank(redisKeyBuild);
+-        String key = redisKeyBuild.getRelKey();
++        String key = redisKeyBuild.getRelKey();//构建完整key
+         // 如果取String类型 则直接取出返回
+         String cachedValue = redisTemplate.opsForValue().get(key);
+         if (String.class.isAssignableFrom(clazz)) {
+diff --git a/damai-redisson-framework/damai-redisson-service-framework/damai-redisson-common-framework/src/main/java/com/damai/lockinfo/LockInfoHandle.java b/damai-redisson-framework/damai-redisson-service-framework/damai-redisson-common-framework/src/main/java/com/damai/lockinfo/LockInfoHandle.java
+index 954a1ce8..e9e7a4f1 100644
+--- a/damai-redisson-framework/damai-redisson-service-framework/damai-redisson-common-framework/src/main/java/com/damai/lockinfo/LockInfoHandle.java
++++ b/damai-redisson-framework/damai-redisson-service-framework/damai-redisson-common-framework/src/main/java/com/damai/lockinfo/LockInfoHandle.java
+@@ -14,6 +14,7 @@ public interface LockInfoHandle {
+      * @param name 锁业务名
+      * @param keys 锁
+      * @return 锁信息
++     * 用于 AOP 切面：从 JoinPoint 中解析方法参数，构建锁名
+      * */
+     String getLockName(JoinPoint joinPoint, String name, String[] keys);
+     
+@@ -22,6 +23,7 @@ public interface LockInfoHandle {
+      * @param name 锁业务名
+      * @param keys 锁
+      * @return 锁信息
++     * 用于编程式：直接拼接字符串，不需要 JoinPoint
+      * */
+     String simpleGetLockName(String name,String[] keys);
+ }
+diff --git a/damai-server/damai-user-service/src/main/java/com/damai/service/UserService.java b/damai-server/damai-user-service/src/main/java/com/damai/service/UserService.java
+index 4c323c21..eb2a5e3b 100644
+--- a/damai-server/damai-user-service/src/main/java/com/damai/service/UserService.java
++++ b/damai-server/damai-user-service/src/main/java/com/damai/service/UserService.java
+@@ -110,6 +110,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
+     @Transactional(rollbackFor = Exception.class)
+     @ServiceLock(lockType= LockType.Write,name = REGISTER_USER_LOCK,keys = {"#userRegisterDto.mobile"})
+     public Boolean register(UserRegisterDto userRegisterDto) {
++        //责任链校验
+         compositeContainer.execute(CompositeCheckType.USER_REGISTER_CHECK.getValue(),userRegisterDto);
+         log.info("注册手机号:{}",userRegisterDto.getMobile());
+         //用户表添加
+@@ -155,27 +156,35 @@ public class UserService extends ServiceImpl<UserMapper, User> {
+         String mobile = userLoginDto.getMobile();
+         String email = userLoginDto.getEmail();
+         String password = userLoginDto.getPassword();
++
++        //手机号邮箱不可同时为空
+         if (StringUtil.isEmpty(mobile) && StringUtil.isEmpty(email)) {
+             throw new DaMaiFrameException(BaseCode.USER_MOBILE_AND_EMAIL_NOT_EXIST);
+         }
+         Long userId;
+         if (StringUtil.isNotEmpty(mobile)) {
++            //去redis查这个手机号登录错了几次了
+             String errorCountStr = 
+                     redisCache.get(RedisKeyBuild.createRedisKey(RedisKeyManage.LOGIN_USER_MOBILE_ERROR, mobile), String.class);
++            //如果不为空，说明不是第一次登,并且已经错了5次了，报错
+             if (StringUtil.isNotEmpty(errorCountStr) && Integer.parseInt(errorCountStr) >= ERROR_COUNT_THRESHOLD) {
+                 throw new DaMaiFrameException(BaseCode.MOBILE_ERROR_COUNT_TOO_MANY);
+             }
+             LambdaQueryWrapper<UserMobile> queryWrapper = Wrappers.lambdaQuery(UserMobile.class)
+                     .eq(UserMobile::getMobile, mobile);
++            //查询
+             UserMobile userMobile = userMobileMapper.selectOne(queryWrapper);
+-            if (Objects.isNull(userMobile)) {
++            if (Objects.isNull(userMobile)) {//手机号不存在，设置错计数过期时间
+                 redisCache.incrBy(RedisKeyBuild.createRedisKey(RedisKeyManage.LOGIN_USER_MOBILE_ERROR,mobile),1);
+                 redisCache.expire(RedisKeyBuild.createRedisKey(RedisKeyManage.LOGIN_USER_MOBILE_ERROR,mobile),1,TimeUnit.MINUTES);
+                 throw new DaMaiFrameException(BaseCode.USER_MOBILE_EMPTY);
+             }
++            //返回用户id
+             userId = userMobile.getUserId();
+         }else {
+-            String errorCountStr = 
++            //手机号为空
++            //去redis查这个邮箱登录错了几次了
++            String errorCountStr =
+                     redisCache.get(RedisKeyBuild.createRedisKey(RedisKeyManage.LOGIN_USER_EMAIL_ERROR, email), String.class);
+             if (StringUtil.isNotEmpty(errorCountStr) && Integer.parseInt(errorCountStr) >= ERROR_COUNT_THRESHOLD) {
+                 throw new DaMaiFrameException(BaseCode.EMAIL_ERROR_COUNT_TOO_MANY);
+@@ -187,19 +196,22 @@ public class UserService extends ServiceImpl<UserMapper, User> {
+                 redisCache.incrBy(RedisKeyBuild.createRedisKey(RedisKeyManage.LOGIN_USER_EMAIL_ERROR,email),1);
+                 redisCache.expire(RedisKeyBuild.createRedisKey(RedisKeyManage.LOGIN_USER_EMAIL_ERROR,email),1,TimeUnit.MINUTES);
+                 throw new DaMaiFrameException(BaseCode.USER_EMAIL_NOT_EXIST);
+-            }
++            }//返回用户id
+             userId = userEmail.getUserId();
+         }
+         LambdaQueryWrapper<User> queryUserWrapper = Wrappers.lambdaQuery(User.class)
+                 .eq(User::getId, userId).eq(User::getPassword, password);
++        //查询数据库,id和密码能不能对上
+         User user = userMapper.selectOne(queryUserWrapper);
+         if (Objects.isNull(user)) {
+             throw new DaMaiFrameException(BaseCode.NAME_PASSWORD_ERROR);
+         }
++        //设置用户登录态过期时间
+         redisCache.set(RedisKeyBuild.createRedisKey(RedisKeyManage.USER_LOGIN,code,user.getId()),user,
+                 tokenExpireTime,TimeUnit.MINUTES);
+         userLoginVo.setUserId(userId);
+         userLoginVo.setToken(createToken(user.getId(),getChannelDataByCode(code).getTokenSecret()));
++        //返回用户登录信息
+         return userLoginVo;
+     }
+     
+diff --git a/vue3/.env.development b/vue3/.env.development
+index 7e096ecc..ffa254b5 100644
+--- a/vue3/.env.development
++++ b/vue3/.env.development
+@@ -7,7 +7,7 @@ VITE_APP_BASE_API = '/barley-dev'
+ # 后端地址
+ VITE_APP_URL = 'http://127.0.0.1:6085'
+ # 是否签名调用（0:不签名普通调用，1:签名调用）
+-VITE_SIGN_FLAG = 0
++VITE_SIGN_FLAG = 1
+ # 平台code码
+ VITE_CODE = '0001'
+ # 签名私钥
